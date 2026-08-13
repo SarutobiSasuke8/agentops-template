@@ -17,6 +17,16 @@ The init script prompts for project name, vibe, install/run/test/lint/build comm
 
 Prefer the manual path? Follow [`docs/SETUP_CHECKLIST.md`](docs/SETUP_CHECKLIST.md).
 
+## Persona council in action
+
+Three worked examples show the council doing real work, each grounded in the shipped protocol, personas, and slash commands:
+
+- [**Feature planning**](docs/examples/council-feature-planning.md) -- a narrow `/council` run: three personas, one scope decision, project residue captured.
+- [**Refactor review**](docs/examples/council-code-refactor.md) -- `/review` dispatching the read-only `code-reviewer` and `qa-acceptance-tester` subagents on an uncommitted diff.
+- [**Full orchestration**](docs/examples/council-orchestration.md) -- how a full-council run fans out parallel subagents, resolves conflicts, and synthesizes one report.
+
+The mechanics behind them: [`personas/agent-council-protocol.md`](personas/agent-council-protocol.md) (routing, sequence, report format) and [`docs/SUBAGENTS.md`](docs/SUBAGENTS.md) (when to fan out and when not to).
+
 ## What you get
 
 - **One operating contract** -- `AGENTS.md` is canonical; `CLAUDE.md` / `CODEX.md` / `GEMINI.md` / `.github/copilot-instructions.md` / `.cursor/rules/vibe-coding-core.mdc` are thin tool-specific adapters that point at it.
