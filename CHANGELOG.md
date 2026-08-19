@@ -14,7 +14,7 @@ The version recorded in `VERSION` is the template's own version, not the version
 
 ### Changed
 
-- Public positioning is now **AgentOps Template** while the GitHub repository, private root package name, `vibe` CLI alias, and `.vibe-template-version` marker remain compatible pending a coordinated rename.
+- Public positioning, the GitHub repository, and the private root package are now **AgentOps Template**. The `vibe` CLI alias and `.vibe-template-version` marker remain compatible with existing clones and generated forks.
 - Template CI now runs the canonical check on Linux and Windows without assuming an application framework; generated projects still opt into their own stack-specific quality workflow.
 - Root package metadata now declares its MIT license, supported Node/npm engines, repository links, issue tracker, homepage, and discovery keywords.
 - README now distinguishes [Meta-Agent-OS](https://github.com/SarutobiSasuke8/Meta-Agent-OS) as the methodology upstream from AgentOps Template's repository execution layer.
@@ -103,7 +103,7 @@ First public template release. The repo is now stable enough that a stranger can
 - No automatic upgrade path between template versions. Forks track template changes manually for now.
 - Stack-agnostic by design -- the template ships no language or framework code.
 
-[Unreleased]: https://github.com/SarutobiSasuke8/vibe-coding-generalist-template/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/SarutobiSasuke8/vibe-coding-generalist-template/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/SarutobiSasuke8/vibe-coding-generalist-template/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/SarutobiSasuke8/vibe-coding-generalist-template/releases/tag/v0.1.0
+[Unreleased]: https://github.com/SarutobiSasuke8/agentops-template/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/SarutobiSasuke8/agentops-template/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/SarutobiSasuke8/agentops-template/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/SarutobiSasuke8/agentops-template/releases/tag/v0.1.0
