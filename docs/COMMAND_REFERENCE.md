@@ -2,6 +2,19 @@
 
 ## Current Scripts
 
+### `npm run check`
+
+Canonical cross-platform verification for the AgentOps Template itself. It runs the stable template-owned checks only:
+
+- workspace build
+- AgentOps CLI unit tests
+- generated-fork init smoke tests for minimal, standard, and full tiers
+- agent-doc alignment
+- agent-behavior scaffold validation
+- design-contract validation
+
+It deliberately does not infer or run a generated project's application-specific commands. Forks activate `.github/workflows/quality.yml.example` once their real stack is known.
+
 ### `./scripts/check-agent-docs.ps1`
 
 Validates the repo-level agent operating layer.
@@ -27,6 +40,7 @@ Validates the agentic runtime scaffold:
 - `QA/AGENT_BEHAVIOR_CHECKS.md`
 
 Run it after changing tool permissions, state files, memory conventions, or execution-loop rules.
+A bash twin (`./scripts/check-agent-behavior.sh`) provides the same validation on Linux and macOS.
 
 ## Planned CLI
 

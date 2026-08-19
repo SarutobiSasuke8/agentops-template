@@ -1,125 +1,36 @@
-name: Agent Docs
+name: Template checks
 
 on:
   pull_request:
-    paths:
-      - "AGENTS.md"
-      - "CLAUDE.md"
-      - "CODEX.md"
-      - "GEMINI.md"
-      - "README.md"
-      - "TODO.md"
-      - "ROADMAP.md"
-      - "CONTRIBUTING.md"
-      - "CHANGELOG.md"
-      - "LICENSE"
-      - "VERSION"
-      - ".env.example"
-      - ".github/copilot-instructions.md"
-      - ".github/workflows/agent-docs.yml"
-      - ".cursor/rules/**"
-      - ".claude/**"
-      - "docs/**"
-      - "personas/**"
-      - "Session Logs/**"
-      - "Templates/**"
-      - "scripts/**"
-      - "Agent State/**"
-      - "Memory/**"
-      - "QA/**"
-      - "workflows/**"
-      - "examples/**"
-      - "DESIGN.md"
-      - "agentops.config.yml"
-      - "package.json"
-      - "package-lock.json"
-      - "tsconfig.base.json"
-      - "packages/**"
   push:
     branches:
       - main
-    paths:
-      - "AGENTS.md"
-      - "CLAUDE.md"
-      - "CODEX.md"
-      - "GEMINI.md"
-      - "README.md"
-      - "TODO.md"
-      - "ROADMAP.md"
-      - "CONTRIBUTING.md"
-      - "CHANGELOG.md"
-      - "LICENSE"
-      - "VERSION"
-      - ".env.example"
-      - ".github/copilot-instructions.md"
-      - ".github/workflows/agent-docs.yml"
-      - ".cursor/rules/**"
-      - ".claude/**"
-      - "docs/**"
-      - "personas/**"
-      - "Session Logs/**"
-      - "Templates/**"
-      - "scripts/**"
-      - "Agent State/**"
-      - "Memory/**"
-      - "QA/**"
-      - "workflows/**"
-      - "examples/**"
-      - "DESIGN.md"
-      - "agentops.config.yml"
-      - "package.json"
-      - "package-lock.json"
-      - "tsconfig.base.json"
-      - "packages/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: template-checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  check-agent-docs-pwsh:
-    name: Drift check (pwsh, windows-latest)
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run PowerShell drift check
-        shell: pwsh
-        run: ./scripts/check-agent-docs.ps1
-
-  check-agent-docs-bash:
-    name: Drift check (bash, ubuntu-latest)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run bash drift check
-        run: |
-          chmod +x ./scripts/check-agent-docs.sh
-          ./scripts/check-agent-docs.sh
-
-  test-init-pwsh:
-    name: Init smoke test (pwsh, windows-latest)
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run PowerShell init smoke test
-        shell: pwsh
-        run: ./scripts/test-init.ps1
-
-  test-init-bash:
-    name: Init smoke test (bash, ubuntu-latest)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run bash init smoke test
-        run: |
-          chmod +x ./scripts/test-init.sh
-          ./scripts/test-init.sh
-
-  test-cli:
-    name: agentops CLI tests (ubuntu-latest)
-    runs-on: ubuntu-latest
+  check:
+    name: Canonical check (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Run CLI tests
-        run: npm test
+      - name: Run canonical template check
+        run: npm run check

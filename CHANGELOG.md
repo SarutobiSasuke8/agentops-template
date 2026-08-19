@@ -6,6 +6,19 @@ The version recorded in `VERSION` is the template's own version, not the version
 
 ## [Unreleased]
 
+### Added
+
+- Canonical cross-platform `npm run check` covering the workspace build, CLI tests, init smoke tests, agent-doc alignment, agent-behavior validation, and design-contract checks.
+- Bash parity for the agent-behavior check and a small platform dispatcher used by local checks and CI.
+- Minimal-tier init coverage alongside the existing standard/full smoke cases, plus stronger generated-fork readiness assertions.
+
+### Changed
+
+- Public positioning is now **AgentOps Template** while the GitHub repository, private root package name, `vibe` CLI alias, and `.vibe-template-version` marker remain compatible pending a coordinated rename.
+- Template CI now runs the canonical check on Linux and Windows without assuming an application framework; generated projects still opt into their own stack-specific quality workflow.
+- Root package metadata now declares its MIT license, supported Node/npm engines, repository links, issue tracker, homepage, and discovery keywords.
+- README now distinguishes [Meta-Agent-OS](https://github.com/SarutobiSasuke8/Meta-Agent-OS) as the methodology upstream from AgentOps Template's repository execution layer.
+
 ## [0.3.0] - 2026-07-31
 
 Reunifies two diverged lines of the template: the published v0.2.0 (persona subagents, self-enforcing drift check, fork-ready init) and a local line that built the `agentops` CLI, the agentic runtime layer, and the design-system contract. Both feature sets now live in one history.

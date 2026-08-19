@@ -118,6 +118,14 @@ replace_in_file() {
     ' "$path"
 }
 
+yaml_quote() {
+    local value="$1"
+    value="${value//\\/\\\\}"
+    value="${value//\"/\\\"}"
+    value="${value//$'\n'/\\n}"
+    printf '"%s"' "$value"
+}
+
 write_project_brief() {
     local name="${project_name:-This project}"
     local type="${project_type:-Not specified yet}"
@@ -267,7 +275,7 @@ This repo uses an agent operating contract:
 
 ---
 
-Built from the Vibe Coding Generalist Template (template version recorded in .vibe-template-version).
+Built from the AgentOps Template (currently distributed from vibe-coding-generalist-template; template version recorded in .vibe-template-version).
 EOF
     echo "  generated README.md"
 }
@@ -368,7 +376,7 @@ EOF
 }
 
 echo
-echo "Vibe Coding Template -- interactive setup"
+echo "AgentOps Template -- interactive setup"
 echo "----------------------------------------"
 
 agents_path="$root/AGENTS.md"
@@ -442,6 +450,24 @@ replace_in_file "AGENTS.md" 'Language/framework: `TODO`' "Language/framework: \`
 replace_in_file "AGENTS.md" 'Package manager: `TODO`' "Package manager: \`Not specified\`" literal || true
 replace_in_file "AGENTS.md" 'Formatting: `TODO`' "Formatting: \`Follow surrounding code\`" literal || true
 replace_in_file "AGENTS.md" 'Test framework: `TODO`' "Test framework: \`Not specified\`" literal || true
+
+# Keep the machine-readable AgentOps config aligned with the generated docs.
+case "$personas_tier" in
+    minimal) config_mode="lite" ;;
+    full) config_mode="full-agentic" ;;
+    *) config_mode="standard" ;;
+esac
+
+[[ -n "$project_name" ]] && replace_in_file "agentops.config.yml" "  name: TODO" "  name: $(yaml_quote "$project_name")" literal || true
+[[ -n "$project_type" ]] && replace_in_file "agentops.config.yml" "  type: TODO" "  type: $(yaml_quote "$project_type")" literal || true
+[[ -n "$current_stage" ]] && replace_in_file "agentops.config.yml" "  stage: prototype" "  stage: $(yaml_quote "$current_stage")" literal || true
+[[ -n "$primary_user" ]] && replace_in_file "agentops.config.yml" "  primaryUser: TODO" "  primaryUser: $(yaml_quote "$primary_user")" literal || true
+replace_in_file "agentops.config.yml" "  mode: standard" "  mode: $(yaml_quote "$config_mode")" literal || true
+[[ -n "$install_cmd" ]] && replace_in_file "agentops.config.yml" "  install: TODO" "  install: $(yaml_quote "$install_cmd")" literal || true
+[[ -n "$run_cmd" ]] && replace_in_file "agentops.config.yml" "  dev: TODO" "  dev: $(yaml_quote "$run_cmd")" literal || true
+[[ -n "$test_cmd" ]] && replace_in_file "agentops.config.yml" "  test: TODO" "  test: $(yaml_quote "$test_cmd")" literal || true
+[[ -n "$lint_cmd" ]] && replace_in_file "agentops.config.yml" "  lint: TODO" "  lint: $(yaml_quote "$lint_cmd")" literal || true
+[[ -n "$build_cmd" ]] && replace_in_file "agentops.config.yml" "  build: TODO" "  build: $(yaml_quote "$build_cmd")" literal || true
 
 case "$personas_tier" in
     minimal)

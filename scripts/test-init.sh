@@ -20,8 +20,17 @@ assert_contains() {
     fi
 }
 
-mkdir -p "$temp_root"
-tar --exclude='.git' -C "$source_root" -cf - . | tar -C "$temp_root" -xf -
+copy_template() {
+    local destination="$1"
+    mkdir -p "$destination"
+    tar \
+        --exclude='.git' \
+        --exclude='node_modules' \
+        --exclude='reports' \
+        -C "$source_root" -cf - . | tar -C "$destination" -xf -
+}
+
+copy_template "$temp_root"
 
 bash "$temp_root/scripts/init.sh" \
     --non-interactive \
@@ -59,6 +68,14 @@ readme="$temp_root/README.md"
 assert_contains "$readme" "# Bootstrap Smoke Project" "generated README title"
 assert_contains "$readme" "npm install" "generated README install command"
 assert_contains "$readme" "AGENTS.md" "generated README agent contract pointer"
+assert_contains "$readme" "Built from the AgentOps Template" "generated README provenance"
+
+config="$temp_root/agentops.config.yml"
+assert_contains "$config" 'name: "Bootstrap Smoke Project"' "AgentOps config project name"
+assert_contains "$config" 'type: "Node app"' "AgentOps config project type"
+assert_contains "$config" 'primaryUser: "Solo builder"' "AgentOps config primary user"
+assert_contains "$config" 'mode: "full-agentic"' "AgentOps config full mode"
+assert_contains "$config" 'test: "npm test"' "AgentOps config test command"
 
 todo="$temp_root/TODO.md"
 assert_contains "$todo" "Working queue for Bootstrap Smoke Project" "generated TODO stub"
@@ -87,11 +104,30 @@ fi
 
 bash "$temp_root/scripts/check-agent-docs.sh"
 bash "$temp_root/scripts/check-agent-docs.sh" --strict
+bash "$temp_root/scripts/check-agent-behavior.sh"
+
+# Full keeps all 11 operating personas active.
+for kept in \
+    "aegis-defensive-security.md" \
+    "code-reviewer-maintainability.md" \
+    "cto-vibe-coding.md" \
+    "data-analytics-lead.md" \
+    "delivery-lead.md" \
+    "design-director-vibe-coding.md" \
+    "growth-launch-strategist.md" \
+    "head-of-product-vibe-coding.md" \
+    "ops-deployment-engineer.md" \
+    "qa-acceptance-tester.md" \
+    "research-scout.md"; do
+    if [[ ! -f "$temp_root/personas/$kept" ]]; then
+        echo "Full tier missing persona: $kept" >&2
+        exit 1
+    fi
+done
 
 # Standard-tier verification: demoted set should land under personas/optional/
 standard_root="$temp_parent/repo-standard"
-mkdir -p "$standard_root"
-tar --exclude='.git' -C "$source_root" -cf - . | tar -C "$standard_root" -xf -
+copy_template "$standard_root"
 
 bash "$standard_root/scripts/init.sh" \
     --non-interactive \
@@ -147,6 +183,59 @@ if grep -qE '^Session Logs/\*\.md' "$standard_root/.gitignore"; then
     exit 1
 fi
 
+assert_contains "$standard_root/agentops.config.yml" 'mode: "standard"' "standard AgentOps config mode"
+
 bash "$standard_root/scripts/check-agent-docs.sh"
 
-echo "Bash init smoke test passed."
+# Minimal-tier verification: only Product, CTO, and QA remain active.
+minimal_root="$temp_parent/repo-minimal"
+copy_template "$minimal_root"
+
+bash "$minimal_root/scripts/init.sh" \
+    --non-interactive \
+    --project-name "Minimal Tier Smoke" \
+    --project-type "CLI" \
+    --vibe "A minimal generated fork with only the core decision roles." \
+    --primary-user "Solo builder" \
+    --install "npm install" \
+    --run "npm run dev" \
+    --test "npm test" \
+    --lint "npm run lint" \
+    --build "npm run build" \
+    --primary-agent "codex" \
+    --current-stage "prototype" \
+    --personas-tier "minimal" >/dev/null
+
+for kept in \
+    "head-of-product-vibe-coding.md" \
+    "cto-vibe-coding.md" \
+    "qa-acceptance-tester.md"; do
+    if [[ ! -f "$minimal_root/personas/$kept" ]]; then
+        echo "Minimal tier missing kept persona: $kept" >&2
+        exit 1
+    fi
+done
+
+for demoted in \
+    "aegis-defensive-security.md" \
+    "code-reviewer-maintainability.md" \
+    "data-analytics-lead.md" \
+    "delivery-lead.md" \
+    "design-director-vibe-coding.md" \
+    "growth-launch-strategist.md" \
+    "ops-deployment-engineer.md" \
+    "research-scout.md"; do
+    if [[ ! -f "$minimal_root/personas/optional/$demoted" ]]; then
+        echo "Minimal tier did not demote persona: $demoted" >&2
+        exit 1
+    fi
+    if [[ -f "$minimal_root/personas/$demoted" ]]; then
+        echo "Minimal tier left persona active when it should be optional: $demoted" >&2
+        exit 1
+    fi
+done
+
+assert_contains "$minimal_root/agentops.config.yml" 'mode: "lite"' "minimal AgentOps config mode"
+bash "$minimal_root/scripts/check-agent-docs.sh" --strict
+
+echo "Bash init smoke tests passed (full, standard, minimal)."
