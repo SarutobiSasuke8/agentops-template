@@ -1,8 +1,10 @@
-# Vibe Coding Generalist Template
+# AgentOps Template
 
-A forkable starter for AI-assisted software projects. Aligns Claude Code, Codex, Cursor, Gemini, and Copilot to one operating contract, ships an 11-persona council that runs as parallel Claude Code subagents, and prevents the most common ways forks ship half-configured.
+A forkable, repo-native operating layer for AI-assisted software projects. It aligns Claude Code, Codex, Cursor, Gemini, and Copilot to one governed contract, gives agents explicit state and permission boundaries, and prevents forks from shipping half-configured.
 
 Beyond the operating contract, the template ships an agentic runtime layer (`Agent State/`, `Memory/`, `QA/`), a durable design-system contract (`DESIGN.md`), and the `agentops` CLI (`packages/cli`) that validates, operates, and maintains all of it.
+
+> **Rename status:** the product name is now **AgentOps Template**. The GitHub repository, private root package name, `vibe` CLI alias, and `.vibe-template-version` marker keep their existing names until a coordinated GitHub rename and migration; existing clones and generated forks remain compatible.
 
 ## Quickstart
 
@@ -16,6 +18,19 @@ Beyond the operating contract, the template ships an agentic runtime layer (`Age
 The init script prompts for project name, vibe, install/run/test/lint/build commands, primary agent, and personas tier (`minimal` / `standard` / `full`) -- then fills placeholders, demotes the personas the chosen tier doesn't keep, and runs the drift check. Re-run anytime with `--force` (or `-Force`).
 
 Prefer the manual path? Follow [`docs/SETUP_CHECKLIST.md`](docs/SETUP_CHECKLIST.md).
+
+Verify the template itself with one cross-platform command:
+
+```bash
+npm ci
+npm run check
+```
+
+`npm run check` builds and tests the AgentOps CLI, smoke-tests initialized forks in all three persona tiers, validates agent docs and behavior scaffolding, and checks the design contract. It does not guess the generated project's application stack; `.github/workflows/quality.yml.example` remains the opt-in home for application lint, tests, and builds.
+
+## Relationship to Meta-Agent-OS
+
+[Meta-Agent-OS](https://github.com/SarutobiSasuke8/Meta-Agent-OS) is the methodology upstream: it helps diagnose, design, cost, and govern a multi-agent system before implementation. AgentOps Template is the execution substrate downstream: it turns those decisions into a forkable repository contract, permission gates, agent state, verification, and maintenance routines.
 
 ## Persona council in action
 
@@ -90,7 +105,7 @@ For the full FAQ see [`docs/FAQ.md`](docs/FAQ.md). The short version:
 
 **What if I only use Claude Code?** Same answer as the agents question: leave the others. They cost ~150 lines total and your collaborators may use them.
 
-**Stack-agnostic?** Yes. The template intentionally has no language or framework code. Add your stack after init; rename `quality.yml.example` to `quality.yml` in `.github/workflows/` when you have lint/test/build to wire up.
+**Stack-agnostic?** Yes. The template's own cross-platform CI validates only the AgentOps operating layer. Add your application stack after init, then rename `quality.yml.example` to `quality.yml` in `.github/workflows/` when you have real lint/test/build commands to wire up.
 
 ## Repo shape
 

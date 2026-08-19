@@ -2,21 +2,46 @@
   "name": "vibe-coding-generalist-template",
   "version": "0.1.0",
   "private": true,
-  "description": "Agent ops template and CLI scaffold for AI-assisted software repos.",
+  "description": "AgentOps Template: a governed, repo-native operating layer for AI-assisted software projects.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SarutobiSasuke8/vibe-coding-generalist-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SarutobiSasuke8/vibe-coding-generalist-template/issues"
+  },
+  "homepage": "https://github.com/SarutobiSasuke8/vibe-coding-generalist-template#readme",
+  "keywords": [
+    "agentops",
+    "ai-agents",
+    "coding-agents",
+    "local-first",
+    "multi-agent",
+    "project-template"
+  ],
   "type": "module",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
-    "check:agent-docs": "pwsh ./scripts/check-agent-docs.ps1",
-    "check:agent-behavior": "pwsh ./scripts/check-agent-behavior.ps1",
+    "check": "npm run build && npm run test:unit && npm run test:init && npm run check:agent-docs && npm run check:agent-behavior && npm run check:design:compiled",
+    "check:agent-docs": "node ./scripts/run-platform-check.mjs agent-docs",
+    "check:agent-behavior": "node ./scripts/run-platform-check.mjs agent-behavior",
     "check:design": "npm run build --workspace @agentops-os/cli && node packages/cli/dist/index.js design check",
+    "check:design:compiled": "node packages/cli/dist/index.js design check",
     "health": "npm run build --workspace @agentops-os/cli && node packages/cli/dist/index.js health",
     "maintenance": "npm run build --workspace @agentops-os/cli && node packages/cli/dist/index.js maintenance",
     "maintenance:quick": "npm run build --workspace @agentops-os/cli && node packages/cli/dist/index.js maintenance --no-tests",
     "maintenance:report": "npm run build --workspace @agentops-os/cli && node packages/cli/dist/index.js maintenance --no-tests --out reports/agent-maintenance.json",
-    "test": "npm run build --workspaces && node --test \"packages/cli/dist/**/*.test.js\""
+    "test": "npm run build && npm run test:unit && npm run test:init",
+    "test:unit": "node --test \"packages/cli/dist/**/*.test.js\"",
+    "test:init": "node ./scripts/run-platform-check.mjs init-smoke"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",

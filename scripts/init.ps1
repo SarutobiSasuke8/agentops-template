@@ -74,6 +74,11 @@ function Replace-InFile {
     return $false
 }
 
+function ConvertTo-YamlScalar {
+    param([string]$Value)
+    return ($Value | ConvertTo-Json -Compress)
+}
+
 function Write-ProjectBrief {
     param(
         [string]$Name,
@@ -239,7 +244,7 @@ This repo uses an agent operating contract:
 
 ---
 
-Built from the Vibe Coding Generalist Template (template version recorded in .vibe-template-version).
+Built from the AgentOps Template (currently distributed from vibe-coding-generalist-template; template version recorded in .vibe-template-version).
 "@
 
     Set-Content -LiteralPath (Join-Path $root "README.md") -Value $readme -NoNewline
@@ -352,7 +357,7 @@ Update this section as durable themes emerge from the logs. Keep entries non-sen
 }
 
 Write-Host ""
-Write-Host "Vibe Coding Template -- interactive setup" -ForegroundColor Cyan
+Write-Host "AgentOps Template -- interactive setup" -ForegroundColor Cyan
 Write-Host "----------------------------------------"
 
 # Detect prior runs by checking AGENTS.md for the literal placeholder.
@@ -447,6 +452,42 @@ Replace-InFile "AGENTS.md" 'Language/framework: `TODO`' "Language/framework: ``$
 Replace-InFile "AGENTS.md" 'Package manager: `TODO`' "Package manager: ``Not specified``" -Literal | Out-Null
 Replace-InFile "AGENTS.md" 'Formatting: `TODO`' "Formatting: ``Follow surrounding code``" -Literal | Out-Null
 Replace-InFile "AGENTS.md" 'Test framework: `TODO`' "Test framework: ``Not specified``" -Literal | Out-Null
+
+# Keep the machine-readable AgentOps config aligned with the generated docs.
+# JSON strings are valid YAML scalars and safely preserve spaces and punctuation.
+$configMode = switch ($PersonasTier) {
+    "minimal" { "lite" }
+    "full" { "full-agentic" }
+    default { "standard" }
+}
+if ($ProjectName) {
+    Replace-InFile "agentops.config.yml" "  name: TODO" "  name: $(ConvertTo-YamlScalar $ProjectName)" -Literal | Out-Null
+}
+if ($ProjectType) {
+    Replace-InFile "agentops.config.yml" "  type: TODO" "  type: $(ConvertTo-YamlScalar $ProjectType)" -Literal | Out-Null
+}
+if ($CurrentStage) {
+    Replace-InFile "agentops.config.yml" "  stage: prototype" "  stage: $(ConvertTo-YamlScalar $CurrentStage)" -Literal | Out-Null
+}
+if ($PrimaryUser) {
+    Replace-InFile "agentops.config.yml" "  primaryUser: TODO" "  primaryUser: $(ConvertTo-YamlScalar $PrimaryUser)" -Literal | Out-Null
+}
+Replace-InFile "agentops.config.yml" "  mode: standard" "  mode: $(ConvertTo-YamlScalar $configMode)" -Literal | Out-Null
+if ($InstallCmd) {
+    Replace-InFile "agentops.config.yml" "  install: TODO" "  install: $(ConvertTo-YamlScalar $InstallCmd)" -Literal | Out-Null
+}
+if ($RunCmd) {
+    Replace-InFile "agentops.config.yml" "  dev: TODO" "  dev: $(ConvertTo-YamlScalar $RunCmd)" -Literal | Out-Null
+}
+if ($TestCmd) {
+    Replace-InFile "agentops.config.yml" "  test: TODO" "  test: $(ConvertTo-YamlScalar $TestCmd)" -Literal | Out-Null
+}
+if ($LintCmd) {
+    Replace-InFile "agentops.config.yml" "  lint: TODO" "  lint: $(ConvertTo-YamlScalar $LintCmd)" -Literal | Out-Null
+}
+if ($BuildCmd) {
+    Replace-InFile "agentops.config.yml" "  build: TODO" "  build: $(ConvertTo-YamlScalar $BuildCmd)" -Literal | Out-Null
+}
 
 # Persona tiering
 $tierDemotions = @{

@@ -1,7 +1,9 @@
-# Stack-agnostic CI quality stub.
+# Application-quality CI stub for projects generated from AgentOps Template.
 #
-# Activation: rename this file to `quality.yml` once your project has lint,
-# typecheck, or tests to run. Until then it stays inert (.example suffix).
+# The template's own operating-layer CI already runs from `agent-docs.yml`
+# without assuming an application stack. Activate this separate workflow by
+# renaming it to `quality.yml` once the generated project has real lint,
+# typecheck, test, or build commands.
 #
 # Edit the `Setup` and per-step blocks for your stack. Examples are commented
 # below for Node and Python — uncomment one and delete the other.
