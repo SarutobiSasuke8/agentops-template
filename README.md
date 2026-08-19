@@ -4,7 +4,7 @@ A forkable, repo-native operating layer for AI-assisted software projects. It al
 
 Beyond the operating contract, the template ships an agentic runtime layer (`Agent State/`, `Memory/`, `QA/`), a durable design-system contract (`DESIGN.md`), and the `agentops` CLI (`packages/cli`) that validates, operates, and maintains all of it.
 
-> **Rename status:** the product name is now **AgentOps Template**. The GitHub repository, private root package name, `vibe` CLI alias, and `.vibe-template-version` marker keep their existing names until a coordinated GitHub rename and migration; existing clones and generated forks remain compatible.
+> **Compatibility:** the GitHub repository and private root package are now named **AgentOps Template**. The `vibe` CLI alias and `.vibe-template-version` marker remain intentionally stable so existing clones and generated forks keep working; GitHub redirects the former repository URL.
 
 ## Quickstart
 

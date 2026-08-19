@@ -1,5 +1,5 @@
 {
-  "name": "vibe-coding-generalist-template",
+  "name": "agentops-template",
   "version": "0.1.0",
   "private": true,
   "description": "AgentOps Template: a governed, repo-native operating layer for AI-assisted software projects.",
@@ -10,12 +10,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SarutobiSasuke8/vibe-coding-generalist-template.git"
+    "url": "git+https://github.com/SarutobiSasuke8/agentops-template.git"
   },
   "bugs": {
-    "url": "https://github.com/SarutobiSasuke8/vibe-coding-generalist-template/issues"
+    "url": "https://github.com/SarutobiSasuke8/agentops-template/issues"
   },
-  "homepage": "https://github.com/SarutobiSasuke8/vibe-coding-generalist-template#readme",
+  "homepage": "https://github.com/SarutobiSasuke8/agentops-template#readme",
   "keywords": [
     "agentops",
     "ai-agents",
