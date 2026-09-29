@@ -32,6 +32,14 @@ npm run check
 
 [Meta-Agent-OS](https://github.com/SarutobiSasuke8/Meta-Agent-OS) is the methodology upstream: it helps diagnose, design, cost, and govern a multi-agent system before implementation. AgentOps Template is the execution substrate downstream: it turns those decisions into a forkable repository contract, permission gates, agent state, verification, and maintenance routines.
 
+## Shipped servers
+
+This template is the contract. These public servers are the current products built under it:
+
+- [gimp-agent-mcp](https://github.com/SarutobiSasuke8/gimp-agent-mcp) edits inside GIMP 3, groups a turn into one undo step, and checks the pixels.
+- [jobscout-mcp](https://github.com/SarutobiSasuke8/jobscout-mcp) searches several job sources and stops before storing a private profile.
+
+
 ## Persona council in action
 
 Three worked examples show the council doing real work, each grounded in the shipped protocol, personas, and slash commands:
